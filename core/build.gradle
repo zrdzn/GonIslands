@@ -6,6 +6,8 @@ plugins {
 group 'io.github.zrdzn.minecraft.gonislands'
 version '1.0.0'
 
+compileJava.options.encoding = "UTF-8"
+
 sourceCompatibility = JavaVersion.VERSION_16
 targetCompatibility = JavaVersion.VERSION_16
 
