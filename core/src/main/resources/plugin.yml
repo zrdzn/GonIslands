@@ -1,0 +1,5 @@
+name: API
+version: 1.0.0
+main: io.github.zrdzn.minecraft.gonislands.core.GonIslandsPlugin
+api-version: 1.17
+author: zrdzn

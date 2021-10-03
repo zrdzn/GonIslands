@@ -1,0 +1,9 @@
+group 'io.github.enixor.minecraft'
+version '1.0.0'
+
+subprojects {
+    apply plugin: 'java'
+
+    sourceCompatibility = JavaVersion.VERSION_16
+    targetCompatibility = JavaVersion.VERSION_16
+}
