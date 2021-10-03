@@ -105,6 +105,9 @@ public class GonIslandsPlugin extends JavaPlugin {
             statement.executeUpdate();
         } catch (SQLException exception) {
             exception.printStackTrace();
+            pluginManager.disablePlugin(this);
+
+            return;
         }
 
         IslandService islandService = new IslandServiceImpl(islandRepository);
