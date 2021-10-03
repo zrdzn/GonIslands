@@ -39,7 +39,7 @@ public class MessageService {
     private ResourceBundle getResourceBundle(Locale locale) {
         ResourceBundle bundle = this.bundleMap.get(locale);
         if (bundle == null) {
-            bundle = ResourceBundle.getBundle("keys/keys", Locale.ENGLISH);
+            bundle = ResourceBundle.getBundle("locale/locale", Locale.ENGLISH);
         }
         return bundle;
     }
