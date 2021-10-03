@@ -94,7 +94,7 @@ public class IslandCreator {
         Clipboard clipboard;
         try (ClipboardReader reader = format.getReader(new FileInputStream(file))) {
             clipboard = reader.read();
-        } catch (final IOException exception) {
+        } catch (IOException exception) {
             exception.printStackTrace();
             return Optional.empty();
         }
