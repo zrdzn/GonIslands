@@ -32,6 +32,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.slf4j.Logger;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -57,7 +58,9 @@ public class GonIslandsPlugin extends JavaPlugin {
 
         SlimePlugin slimePlugin = (SlimePlugin) pluginManager.getPlugin("SlimeWorldManager");
 
-        IslandCreator islandCreator = new IslandCreator(slimePlugin, server, this.getSLF4JLogger());
+        Logger logger = this.getSLF4JLogger();
+
+        IslandCreator islandCreator = new IslandCreator(slimePlugin, server, logger);
 
         this.loadBundles();
 
@@ -86,7 +89,7 @@ public class GonIslandsPlugin extends JavaPlugin {
         }
 
         if (this.dataSource == null) {
-            server.getLogger().severe("Something went wrong while connecting to database. Check your database configuration and restart your server after correcting it.");
+            logger.error("Something went wrong while connecting to database. Check your database configuration and restart your server after correcting it.");
             pluginManager.disablePlugin(this);
 
             return;
