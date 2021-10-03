@@ -30,10 +30,7 @@ public class DataSourceParser {
 
         String user = section.getString("user", "root");
 
-        String password = section.getString("password");
-        if (password == null) {
-            password = "";
-        }
+        String password = section.getString("password", "");
 
         boolean ssl = section.getBoolean("enable-ssl");
 
