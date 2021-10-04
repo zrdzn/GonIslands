@@ -18,11 +18,9 @@ package io.github.zrdzn.minecraft.gonislands.core.island;
 import com.zaxxer.hikari.HikariDataSource;
 import io.github.zrdzn.minecraft.gonislands.api.event.AsyncIslandCreateEvent;
 import io.github.zrdzn.minecraft.gonislands.api.event.AsyncIslandRemoveEvent;
-import io.github.zrdzn.minecraft.gonislands.api.event.IslandRemoveEvent;
 import io.github.zrdzn.minecraft.gonislands.api.island.Island;
 import io.github.zrdzn.minecraft.gonislands.api.island.IslandType;
 import io.github.zrdzn.minecraft.gonislands.core.message.MessageService;
-import io.papermc.lib.PaperLib;
 import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -89,12 +87,8 @@ public class IslandRepository {
             }
         }
 
-        if (PaperLib.isPaper()) {
-            this.pluginManager.callEvent(new AsyncIslandCreateEvent(newIsland.getId()));
-            return newIsland;
-        }
+        this.pluginManager.callEvent(new AsyncIslandCreateEvent(newIsland.getId()));
 
-        this.pluginManager.callEvent(new IslandRemoveEvent(newIsland.getId()));
         return newIsland;
     }
 
@@ -109,12 +103,7 @@ public class IslandRepository {
             return;
         }
 
-        if (PaperLib.isPaper()) {
-            this.pluginManager.callEvent(new AsyncIslandRemoveEvent(islandId));
-            return;
-        }
-
-        this.pluginManager.callEvent(new IslandRemoveEvent(islandId));
+        this.pluginManager.callEvent(new AsyncIslandRemoveEvent(islandId));
     }
 
     public Optional<Island> findIslandById(UUID islandId) {
