@@ -24,7 +24,7 @@ dependencies {
     implementation 'com.zaxxer:HikariCP:5.0.0'
 
     compileOnly 'io.papermc.paper:paper-api:1.17.1-R0.1-SNAPSHOT'
-    compileOnly 'com.grinderwolf:slimeworldmanager-api:2.6.2-SNAPSHOT'
+    compileOnly 'com.grinderwolf:slimeworldmanager-api:2.6.2-archon-SNAPSHOT'
     compileOnly 'com.sk89q.worldedit:worldedit-bukkit:7.2.0'
 }
 
