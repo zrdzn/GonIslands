@@ -28,4 +28,6 @@ dependencies {
     compileOnly 'com.sk89q.worldedit:worldedit-bukkit:7.2.0'
 }
 
-shadowJar
+shadowJar {
+    archiveFileName = "GonIslands v${project.version}.jar"
+}
