@@ -119,7 +119,9 @@ public class GonIslandsPlugin extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        this.dataSource.close();
+        if (this.dataSource != null) {
+            this.dataSource.close();
+        }
     }
 
     public GonIslandsApi getGonIslandsApi() {
