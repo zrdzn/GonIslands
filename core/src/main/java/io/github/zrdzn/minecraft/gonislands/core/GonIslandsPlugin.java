@@ -66,7 +66,7 @@ public class GonIslandsPlugin extends JavaPlugin {
 
         MessageService messageService = new MessageService(server, logger, this.bundleMap);
 
-        IslandRepository islandRepository = new IslandRepository(this.dataSource, server, islandCreator, messageService);
+        IslandRepository islandRepository = new IslandRepository(this.dataSource, islandCreator);
 
         IslandType globalIslandType;
         try {
@@ -100,8 +100,7 @@ public class GonIslandsPlugin extends JavaPlugin {
                 "island_uuid VARCHAR(36) NOT NULL UNIQUE KEY," +
                 "world_uuid VARCHAR(32) NOT NULL UNIQUE KEY," +
                 "island_name VARCHAR(32)," +
-                "owner_uuid VARCHAR(36) NOT NULL UNIQUE KEY," +
-                "owner_name VARCHAR(18));";
+                "owner_uuid VARCHAR(36) NOT NULL UNIQUE KEY);";
         try (Connection connection = this.dataSource.getConnection(); PreparedStatement statement = connection.prepareStatement(query)) {
             statement.executeUpdate();
         } catch (SQLException exception) {
@@ -111,7 +110,7 @@ public class GonIslandsPlugin extends JavaPlugin {
             return;
         }
 
-        IslandService islandService = new IslandServiceImpl(islandRepository);
+        IslandService islandService = new IslandServiceImpl(islandRepository, pluginManager, messageService);
         this.gonIslandsApi.setIslandService(islandService);
 
         this.getCommand("island").setExecutor(new IslandCommand(islandService, globalIslandType, messageService));

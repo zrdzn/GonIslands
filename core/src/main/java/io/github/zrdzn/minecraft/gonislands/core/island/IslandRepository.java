@@ -38,12 +38,9 @@ import java.util.UUID;
 public class IslandRepository {
 
     private final HikariDataSource dataSource;
-    private final Server server;
-    private final PluginManager pluginManager;
     private final IslandCreator islandCreator;
-    private final MessageService messageService;
 
-    public IslandRepository(HikariDataSource dataSource, Server server, IslandCreator islandCreator, MessageService messageService) {
+    public IslandRepository(HikariDataSource dataSource, IslandCreator islandCreator) {
         this.dataSource = dataSource;
         this.server = server;
         this.pluginManager = server.getPluginManager();
@@ -51,7 +48,7 @@ public class IslandRepository {
         this.messageService = messageService;
     }
 
-    public Island save(IslandType islandType, String islandName, UUID newOwnerId) {
+    public Island save(IslandType islandType, String islandName, UUID ownerId) {
         UUID newIslandId = UUID.randomUUID();
 
         UUID islandWorldId = this.islandCreator.prepareNewWorld(islandType, islandName).orElseThrow(() ->

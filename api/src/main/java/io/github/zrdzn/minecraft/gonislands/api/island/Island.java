@@ -49,9 +49,9 @@ public interface Island {
     Optional<String> getName();
 
     /**
-     * Gets the Player of the Island.
+     * Gets the Player UUID of the Island.
      *
-     * @return the island owner
+     * @return the island owner uuid
      */
     UUID getOwnerId();
 
