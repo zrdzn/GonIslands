@@ -16,21 +16,34 @@
 package io.github.zrdzn.minecraft.gonislands.core.message;
 
 import net.kyori.adventure.text.Component;
+import org.bukkit.Server;
 import org.bukkit.entity.Player;
+import org.slf4j.Logger;
 
 import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.UUID;
 
 public class MessageService {
 
+    private final Server server;
+    private final Logger logger;
     private final Map<Locale, ResourceBundle> bundleMap;
 
-    public MessageService(Map<Locale, ResourceBundle> bundleMap) {
+    public MessageService(Server server, Logger logger, Map<Locale, ResourceBundle> bundleMap) {
+        this.server = server;
+        this.logger = logger;
         this.bundleMap = bundleMap;
     }
 
-    public void sendMessage(Player player, String key, Object... replacements) {
+    public void sendMessage(UUID playerId, String key, Object... replacements) {
+        Player player = this.server.getPlayer(playerId);
+        if (player == null) {
+            this.logger.warn("There is not any online player with {} uuid.", playerId);
+            return;
+        }
+
         String message = this.getResourceBundle(player.locale()).getString(key);
 
         player.sendMessage(Component.text(String.format(message, replacements)));
@@ -41,6 +54,7 @@ public class MessageService {
         if (bundle == null) {
             bundle = ResourceBundle.getBundle("locale/locale", Locale.ENGLISH);
         }
+
         return bundle;
     }
 

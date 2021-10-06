@@ -64,7 +64,7 @@ public class GonIslandsPlugin extends JavaPlugin {
 
         this.loadBundles();
 
-        MessageService messageService = new MessageService(this.bundleMap);
+        MessageService messageService = new MessageService(server, logger, this.bundleMap);
 
         IslandRepository islandRepository = new IslandRepository(this.dataSource, server, islandCreator, messageService);
 

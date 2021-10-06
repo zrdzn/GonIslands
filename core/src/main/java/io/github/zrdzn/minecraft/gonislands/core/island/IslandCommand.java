@@ -69,8 +69,8 @@ public class IslandCommand implements CommandExecutor {
                         islandToBeDeleted = islands.get(0);
                     } else {
                         if (args.length == 1) {
-                            this.sendIslandList(player, islands);
-                            this.messageService.sendMessage(player, "command.usage.delete");
+                            this.sendIslandList(playerId, islands);
+                            this.messageService.sendMessage(playerId, "command.usage.delete");
 
                             return;
                         }
@@ -80,8 +80,8 @@ public class IslandCommand implements CommandExecutor {
 
                     this.islandService.removeIsland(islandToBeDeleted.getId());
                 }
-                case "list" -> this.sendIslandList(player, islands);
-                default -> this.messageService.sendMessage(player, "command.invalid_argument");
+                case "list" -> this.sendIslandList(playerId, islands);
+                default -> this.messageService.sendMessage(playerId, "command.invalid_argument");
             }
         });
 
@@ -89,15 +89,15 @@ public class IslandCommand implements CommandExecutor {
         return true;
     }
 
-    private void sendIslandList(Player player, List<Island> islandList) {
+    private void sendIslandList(UUID playerId, List<Island> islandList) {
         if (islandList.isEmpty()) {
-            this.messageService.sendMessage(player, "island.does_not_have");
+            this.messageService.sendMessage(playerId, "island.does_not_have");
             return;
         }
 
         for (int i = 0; i < islandList.size(); i++) {
             Island island = islandList.get(i);
-            this.messageService.sendMessage(player,
+            this.messageService.sendMessage(playerId,
                     "command.island_list_format",
                     String.valueOf(i + 1),
                     island.getId().toString(),
