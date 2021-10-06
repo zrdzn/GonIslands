@@ -34,7 +34,6 @@ import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.session.ClipboardHolder;
 import io.github.zrdzn.minecraft.gonislands.api.island.IslandType;
 import org.bukkit.Server;
-import org.bukkit.World;
 import org.slf4j.Logger;
 
 import java.io.File;
