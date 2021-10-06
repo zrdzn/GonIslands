@@ -23,7 +23,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.UUID;
 
 /**
- * Called when a Player creates an Island.
+ * Called asynchronously when a Player creates an Island.
  * <p>
  * If an Island Create event is cancelled, the Island will not be created.
  */
@@ -35,11 +35,12 @@ public class IslandCreateEvent extends Event implements Cancellable {
     protected boolean cancel;
 
     public IslandCreateEvent(UUID islandId) {
+        super(true);
         this.islandId = islandId;
     }
 
     /**
-     * Gets the id of the Island that is Player creating in this event.
+     * Gets the id of the Island that player creates in this event.
      *
      * @return the id of the island that player creates
      */

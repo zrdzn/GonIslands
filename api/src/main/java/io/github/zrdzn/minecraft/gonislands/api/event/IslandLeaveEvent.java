@@ -23,9 +23,9 @@ import org.jetbrains.annotations.NotNull;
 import java.util.UUID;
 
 /**
- * Called when a Player enters an Island.
+ * Called asynchronously when a Player enters an Island.
  * <p>
- * If an Island Enter event is cancelled, the Player will be teleported to the previous location.
+ * If an Island Leave event is cancelled, the Player will be teleported to the previous location.
  */
 public class IslandLeaveEvent extends Event implements Cancellable {
 
@@ -36,6 +36,7 @@ public class IslandLeaveEvent extends Event implements Cancellable {
     protected boolean cancel;
 
     public IslandLeaveEvent(UUID islandId, UUID playerId) {
+        super(true);
         this.islandId = islandId;
         this.playerId = playerId;
     }
@@ -50,7 +51,7 @@ public class IslandLeaveEvent extends Event implements Cancellable {
     }
 
     /**
-     * Gets the id of the Player that leaves island involved in this event.
+     * Gets the id of the Player that leaves Island involved in this event.
      *
      * @return the id of the player that leaves the island
      */

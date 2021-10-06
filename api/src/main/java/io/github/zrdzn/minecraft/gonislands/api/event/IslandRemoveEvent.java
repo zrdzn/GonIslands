@@ -23,7 +23,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.UUID;
 
 /**
- * Called when a Player removes an Island.
+ * Called asynchronously when a Player removes an Island.
  * <p>
  * If an Island Remove event is cancelled, the Island will not be removed.
  */
@@ -35,6 +35,7 @@ public class IslandRemoveEvent extends Event implements Cancellable {
     protected boolean cancel;
 
     public IslandRemoveEvent(UUID islandId) {
+        super(true);
         this.islandId = islandId;
     }
 
