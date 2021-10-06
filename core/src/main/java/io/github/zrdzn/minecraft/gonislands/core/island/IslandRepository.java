@@ -16,15 +16,8 @@
 package io.github.zrdzn.minecraft.gonislands.core.island;
 
 import com.zaxxer.hikari.HikariDataSource;
-import io.github.zrdzn.minecraft.gonislands.api.event.AsyncIslandCreateEvent;
-import io.github.zrdzn.minecraft.gonislands.api.event.AsyncIslandRemoveEvent;
 import io.github.zrdzn.minecraft.gonislands.api.island.Island;
 import io.github.zrdzn.minecraft.gonislands.api.island.IslandType;
-import io.github.zrdzn.minecraft.gonislands.core.message.MessageService;
-import org.bukkit.Server;
-import org.bukkit.World;
-import org.bukkit.entity.Player;
-import org.bukkit.plugin.PluginManager;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -42,10 +35,7 @@ public class IslandRepository {
 
     public IslandRepository(HikariDataSource dataSource, IslandCreator islandCreator) {
         this.dataSource = dataSource;
-        this.server = server;
-        this.pluginManager = server.getPluginManager();
         this.islandCreator = islandCreator;
-        this.messageService = messageService;
     }
 
     public Island save(IslandType islandType, String islandName, UUID ownerId) {
@@ -72,28 +62,25 @@ public class IslandRepository {
             case SKY -> newIsland = new SkyIsland(newIslandId, islandWorldId, islandName, ownerId);
             case WATER -> newIsland = new WaterIsland(newIslandId, islandWorldId, islandName, ownerId);
             default -> {
-                this.messageService.sendMessage(player, "command.something_went_wrong");
                 return null;
             }
         }
 
-        this.pluginManager.callEvent(new AsyncIslandCreateEvent(newIsland.getId()));
-
         return newIsland;
     }
 
-    public void delete(UUID islandId) {
+    public boolean delete(UUID islandId) {
         try (Connection connection = this.dataSource.getConnection();
              PreparedStatement statement = connection.prepareStatement("DELETE FROM islands WHERE island_uuid = ?")) {
             statement.setString(1, islandId.toString());
 
             statement.executeUpdate();
+
+            return true;
         } catch (SQLException exception) {
             exception.printStackTrace();
-            return;
+            return false;
         }
-
-        this.pluginManager.callEvent(new AsyncIslandRemoveEvent(islandId));
     }
 
     public Optional<Island> findIslandById(UUID islandId) {

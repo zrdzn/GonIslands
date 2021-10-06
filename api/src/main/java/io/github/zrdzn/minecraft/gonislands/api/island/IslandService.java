@@ -31,7 +31,7 @@ public interface IslandService {
      *
      * @return the island that is created
      */
-    CompletableFuture<Island> createIsland(IslandType islandType, String islandName, UUID ownerId);
+    CompletableFuture<Optional<Island>> createIsland(IslandType islandType, String islandName, UUID ownerId);
 
     /**
      * Removes specified Island.
