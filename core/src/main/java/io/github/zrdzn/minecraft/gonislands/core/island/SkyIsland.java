@@ -17,7 +17,6 @@ package io.github.zrdzn.minecraft.gonislands.core.island;
 
 import io.github.zrdzn.minecraft.gonislands.api.island.Island;
 import io.github.zrdzn.minecraft.gonislands.api.island.IslandType;
-import org.bukkit.World;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -25,13 +24,13 @@ import java.util.UUID;
 public class SkyIsland implements Island {
 
     private final UUID id;
-    private final World world;
+    private final UUID worldId;
     private final String name;
     private final UUID ownerId;
 
-    public SkyIsland(UUID id, World world, String name, UUID ownerId) {
+    public SkyIsland(UUID id, UUID worldId, String name, UUID ownerId) {
         this.id = id;
-        this.world = world;
+        this.worldId = worldId;
         this.name = name;
         this.ownerId = ownerId;
     }
@@ -47,8 +46,8 @@ public class SkyIsland implements Island {
     }
 
     @Override
-    public World getWorld() {
-        return this.world;
+    public UUID getWorldId() {
+        return this.worldId;
     }
 
     @Override

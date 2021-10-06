@@ -41,6 +41,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Optional;
+import java.util.UUID;
 
 public class IslandCreator {
 
@@ -54,7 +55,7 @@ public class IslandCreator {
         this.logger = logger;
     }
 
-    public Optional<World> prepareNewWorld(IslandType islandType, String islandName) {
+    public Optional<UUID> prepareNewWorld(IslandType islandType, String islandName) {
         SlimeLoader slimeLoader = this.slimePlugin.getLoader("mysql");
 
         SlimePropertyMap slimePropertyMap = new SlimePropertyMap();
@@ -111,7 +112,7 @@ public class IslandCreator {
             return Optional.empty();
         }
 
-        return Optional.of(world);
+        return Optional.of(world.getUID());
     }
 
 }

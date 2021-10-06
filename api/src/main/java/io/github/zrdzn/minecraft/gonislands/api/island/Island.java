@@ -15,8 +15,6 @@
  */
 package io.github.zrdzn.minecraft.gonislands.api.island;
 
-import org.bukkit.World;
-
 import java.util.Optional;
 import java.util.UUID;
 
@@ -37,11 +35,11 @@ public interface Island {
     IslandType getType();
 
     /**
-     * Gets the World for this Island.
+     * Gets the World UUID for this Island.
      *
-     * @return the island world
+     * @return the island world uuid
      */
-    World getWorld();
+    UUID getWorldId();
 
     /**
      * Gets the Island optional name.

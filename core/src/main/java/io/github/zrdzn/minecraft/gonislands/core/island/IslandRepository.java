@@ -54,19 +54,15 @@ public class IslandRepository {
     public Island save(IslandType islandType, String islandName, UUID newOwnerId) {
         UUID newIslandId = UUID.randomUUID();
 
-        Player player = this.server.getPlayer(newOwnerId);
-        if (player == null) {
-            throw new IllegalArgumentException(String.format("Name of the player cannot be null (%s).", newOwnerId));
-        }
-
-        String playerName = player.getName();
+        UUID islandWorldId = this.islandCreator.prepareNewWorld(islandType, islandName).orElseThrow(() ->
+                new IllegalStateException("Something went wrong while creating new world."));
 
         try (Connection connection = this.dataSource.getConnection();
-             PreparedStatement statement = connection.prepareStatement("INSERT INTO islands (island_uuid, island_name, owner_uuid, owner_name) VALUES (?, ?, ?, ?);")) {
+             PreparedStatement statement = connection.prepareStatement("INSERT INTO islands (island_uuid, world_uuid, island_name, owner_uuid) VALUES (?, ?, ?, ?);")) {
             statement.setString(1, newIslandId.toString());
-            statement.setString(2, islandName);
-            statement.setString(3, newOwnerId.toString());
-            statement.setString(4, playerName);
+            statement.setString(2, islandWorldId.toString());
+            statement.setString(3, islandName);
+            statement.setString(4, ownerId.toString());
 
             statement.executeUpdate();
         } catch (SQLException exception) {
@@ -74,13 +70,10 @@ public class IslandRepository {
             return null;
         }
 
-        World islandWorld = this.islandCreator.prepareNewWorld(islandType, playerName).orElseThrow(() ->
-                new IllegalStateException("Something went wrong while creating new world."));
-
         Island newIsland;
         switch (islandType) {
-            case SKY -> newIsland = new SkyIsland(newIslandId, islandWorld, islandName, newOwnerId);
-            case WATER -> newIsland = new WaterIsland(newIslandId, islandWorld, islandName, newOwnerId);
+            case SKY -> newIsland = new SkyIsland(newIslandId, islandWorldId, islandName, ownerId);
+            case WATER -> newIsland = new WaterIsland(newIslandId, islandWorldId, islandName, ownerId);
             default -> {
                 this.messageService.sendMessage(player, "command.something_went_wrong");
                 return null;
@@ -162,7 +155,7 @@ public class IslandRepository {
             return Optional.empty();
         }
 
-        return Optional.of(new SkyIsland(islandId, this.server.getWorld(worldId), islandName, playerId));
+        return Optional.of(new SkyIsland(islandId, worldId, islandName, playerId));
     }
 
 }
