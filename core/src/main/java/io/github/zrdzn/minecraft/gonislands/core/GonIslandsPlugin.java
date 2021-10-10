@@ -81,6 +81,7 @@ public class GonIslandsPlugin extends JavaPlugin {
 
             globalIslandType = IslandType.valueOf(StringUtils.upperCase(configuration.getString("global-island-type")));
             this.gonIslandsApi.setIslandType(globalIslandType);
+            logger.info("Global island type was set to {}.", globalIslandType);
         } catch (InvalidConfigurationException exception) {
             exception.printStackTrace();
             pluginManager.disablePlugin(this);
@@ -102,7 +103,9 @@ public class GonIslandsPlugin extends JavaPlugin {
                 "island_name VARCHAR(32)," +
                 "owner_uuid VARCHAR(36) NOT NULL UNIQUE KEY);";
         try (Connection connection = this.dataSource.getConnection(); PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.executeUpdate();
+            if (statement.executeUpdate() > 0) {
+                logger.info("Table has been created because it did not exist.");
+            }
         } catch (SQLException exception) {
             exception.printStackTrace();
             pluginManager.disablePlugin(this);

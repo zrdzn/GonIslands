@@ -65,6 +65,7 @@ public class IslandCreator {
             if (slimeWorld == null) {
                 return Optional.empty();
             }
+            this.logger.info("Created new '{}' slime world", islandName);
         } catch (WorldAlreadyExistsException | IOException exception) {
             exception.printStackTrace();
             return Optional.empty();
@@ -106,6 +107,7 @@ public class IslandCreator {
                     .ignoreAirBlocks(false)
                     .build();
             Operations.complete(operation);
+            this.logger.info("Schematic pasted to {} world.", world.getName());
         } catch (WorldEditException exception) {
             exception.printStackTrace();
             return Optional.empty();
