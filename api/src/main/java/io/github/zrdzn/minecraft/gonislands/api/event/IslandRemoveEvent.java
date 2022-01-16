@@ -32,11 +32,13 @@ public class IslandRemoveEvent extends Event implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
 
     protected final UUID islandId;
+    protected final UUID executorId;
     protected boolean cancel;
 
-    public IslandRemoveEvent(UUID islandId) {
+    public IslandRemoveEvent(UUID islandId, UUID executorId) {
         super(true);
         this.islandId = islandId;
+        this.executorId = executorId;
     }
 
     /**
@@ -46,6 +48,15 @@ public class IslandRemoveEvent extends Event implements Cancellable {
      */
     public UUID getIslandId() {
         return this.islandId;
+    }
+
+    /**
+     * Gets the id of the Player that creates the island.
+     *
+     * @return the id of the player that creates the island
+     */
+    public UUID getExecutorId() {
+        return this.executorId;
     }
 
     @Override

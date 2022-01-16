@@ -28,17 +28,18 @@ public interface IslandService {
      * @param islandType type of the island
      * @param islandName name of the island
      * @param ownerId id of the owner
+     * @param executorId id of the player that executes this task
      *
-     * @return the island that is created
      */
-    CompletableFuture<Optional<Island>> createIsland(IslandType islandType, String islandName, UUID ownerId);
+    CompletableFuture<Void> createIsland(IslandType islandType, String islandName, UUID ownerId, UUID executorId);
 
     /**
      * Removes specified Island.
      *
      * @param islandId id of the island
+     * @param executorId id of the player that executes this task
      */
-    CompletableFuture<Void> removeIsland(UUID islandId);
+    CompletableFuture<Void> removeIsland(UUID islandId, UUID executorId);
 
     /**
      * Gets the Island optional by specified island id.

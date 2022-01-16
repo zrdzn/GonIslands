@@ -21,6 +21,8 @@ import io.github.zrdzn.minecraft.gonislands.api.island.Island;
 import io.github.zrdzn.minecraft.gonislands.api.island.IslandService;
 import io.github.zrdzn.minecraft.gonislands.api.island.IslandType;
 import io.github.zrdzn.minecraft.gonislands.core.message.MessageService;
+import org.bukkit.OfflinePlayer;
+import org.bukkit.Server;
 import org.bukkit.plugin.PluginManager;
 
 import java.util.List;
@@ -32,34 +34,39 @@ public class IslandServiceImpl implements IslandService {
 
     private final IslandRepository islandRepository;
     private final PluginManager pluginManager;
+    private final Server server;
     private final MessageService messageService;
 
-    public IslandServiceImpl(IslandRepository islandRepository, PluginManager pluginManager, MessageService messageService) {
+    public IslandServiceImpl(IslandRepository islandRepository, PluginManager pluginManager, Server server, MessageService messageService) {
         this.islandRepository = islandRepository;
         this.pluginManager = pluginManager;
+        this.server = server;
         this.messageService = messageService;
     }
 
     @Override
-    public CompletableFuture<Optional<Island>> createIsland(IslandType islandType, String islandName, UUID ownerId) {
-        return CompletableFuture.supplyAsync(() -> {
-            Island island = this.islandRepository.save(islandType, islandName, ownerId);
-            if (island == null) {
-                this.messageService.sendMessage(ownerId, "command.something_went_wrong");
-                return Optional.empty();
+    public CompletableFuture<Void> createIsland(IslandType islandType, String islandName, UUID ownerId, UUID executorId) {
+        return CompletableFuture.runAsync(() -> {
+            OfflinePlayer player = this.server.getOfflinePlayer(ownerId);
+            if (player.getPlayer() == null) {
+                throw new IllegalArgumentException("Player with that id ({}) does not exist on the server.");
             }
 
-            this.pluginManager.callEvent(new IslandCreateEvent(island.getId()));
+            Island island = this.islandRepository.save(islandType, islandName == null ? player.getName() + "-" + player.getLastLogin() : islandName, ownerId);
+            if (island == null) {
+                this.messageService.sendMessage(executorId, "command.something_went_wrong");
+                return;
+            }
 
-            return Optional.of(island);
+            this.pluginManager.callEvent(new IslandCreateEvent(island.getId(), ownerId));
         });
     }
 
     @Override
-    public CompletableFuture<Void> removeIsland(UUID islandId) {
+    public CompletableFuture<Void> removeIsland(UUID islandId, UUID executorId) {
         return CompletableFuture.runAsync(() -> {
             if (this.islandRepository.delete(islandId)) {
-                this.pluginManager.callEvent(new IslandRemoveEvent(islandId));
+                this.pluginManager.callEvent(new IslandRemoveEvent(islandId, executorId));
             }
         });
     }
