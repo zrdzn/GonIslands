@@ -60,13 +60,13 @@ public class GonIslandsPlugin extends JavaPlugin {
 
         Logger logger = this.getSLF4JLogger();
 
-        IslandCreator islandCreator = new IslandCreator(slimePlugin, server, logger);
+        IslandCreator islandCreator = new IslandCreator(logger, slimePlugin, server);
 
         this.loadBundles();
 
         MessageService messageService = new MessageService(server, logger, this.bundleMap);
 
-        IslandRepository islandRepository = new IslandRepository(this.dataSource, islandCreator);
+        IslandRepository islandRepository = new IslandRepository(logger, this.dataSource, islandCreator);
 
         IslandType globalIslandType;
         try {
@@ -81,6 +81,7 @@ public class GonIslandsPlugin extends JavaPlugin {
 
             globalIslandType = IslandType.valueOf(StringUtils.upperCase(configuration.getString("global-island-type")));
             this.gonIslandsApi.setIslandType(globalIslandType);
+            logger.info("Global island type was set to {}.", globalIslandType);
         } catch (InvalidConfigurationException exception) {
             exception.printStackTrace();
             pluginManager.disablePlugin(this);
@@ -102,7 +103,9 @@ public class GonIslandsPlugin extends JavaPlugin {
                 "island_name VARCHAR(32)," +
                 "owner_uuid VARCHAR(36) NOT NULL UNIQUE KEY);";
         try (Connection connection = this.dataSource.getConnection(); PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.executeUpdate();
+            if (statement.executeUpdate() > 0) {
+                logger.info("Table has been created because it did not exist.");
+            }
         } catch (SQLException exception) {
             exception.printStackTrace();
             pluginManager.disablePlugin(this);
@@ -110,7 +113,7 @@ public class GonIslandsPlugin extends JavaPlugin {
             return;
         }
 
-        IslandService islandService = new IslandServiceImpl(islandRepository, pluginManager, messageService);
+        IslandService islandService = new IslandServiceImpl(islandRepository, pluginManager, server, messageService);
         this.gonIslandsApi.setIslandService(islandService);
 
         this.getCommand("island").setExecutor(new IslandCommand(islandService, globalIslandType, messageService));

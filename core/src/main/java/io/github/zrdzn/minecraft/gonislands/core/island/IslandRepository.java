@@ -18,6 +18,7 @@ package io.github.zrdzn.minecraft.gonislands.core.island;
 import com.zaxxer.hikari.HikariDataSource;
 import io.github.zrdzn.minecraft.gonislands.api.island.Island;
 import io.github.zrdzn.minecraft.gonislands.api.island.IslandType;
+import org.slf4j.Logger;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -30,10 +31,12 @@ import java.util.UUID;
 
 public class IslandRepository {
 
+    private final Logger logger;
     private final HikariDataSource dataSource;
     private final IslandCreator islandCreator;
 
-    public IslandRepository(HikariDataSource dataSource, IslandCreator islandCreator) {
+    public IslandRepository(Logger logger, HikariDataSource dataSource, IslandCreator islandCreator) {
+        this.logger = logger;
         this.dataSource = dataSource;
         this.islandCreator = islandCreator;
     }
@@ -41,6 +44,7 @@ public class IslandRepository {
     public Island save(IslandType islandType, String islandName, UUID ownerId) {
         UUID newIslandId = UUID.randomUUID();
 
+        this.logger.info("Preparing new world for {}-{}...", islandType, islandName);
         UUID islandWorldId = this.islandCreator.prepareNewWorld(islandType, islandName).orElseThrow(() ->
                 new IllegalStateException("Something went wrong while creating new world."));
 
@@ -51,7 +55,9 @@ public class IslandRepository {
             statement.setString(3, islandName);
             statement.setString(4, ownerId.toString());
 
-            statement.executeUpdate();
+            if (statement.executeUpdate() > 0) {
+                this.logger.info("{} island has been saved to database.", islandName);
+            }
         } catch (SQLException exception) {
             exception.printStackTrace();
             return null;

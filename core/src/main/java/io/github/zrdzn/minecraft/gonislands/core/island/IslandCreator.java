@@ -16,7 +16,6 @@
 package io.github.zrdzn.minecraft.gonislands.core.island;
 
 import com.grinderwolf.swm.api.SlimePlugin;
-import com.grinderwolf.swm.api.exceptions.WorldAlreadyExistsException;
 import com.grinderwolf.swm.api.loaders.SlimeLoader;
 import com.grinderwolf.swm.api.world.SlimeWorld;
 import com.grinderwolf.swm.api.world.properties.SlimePropertyMap;
@@ -44,18 +43,22 @@ import java.util.UUID;
 
 public class IslandCreator {
 
+    private final Logger logger;
     private final SlimePlugin slimePlugin;
     private final Server server;
-    private final Logger logger;
 
-    public IslandCreator(SlimePlugin slimePlugin, Server server, Logger logger) {
+    public IslandCreator(Logger logger, SlimePlugin slimePlugin, Server server) {
+        this.logger = logger;
         this.slimePlugin = slimePlugin;
         this.server = server;
-        this.logger = logger;
     }
 
     public Optional<UUID> prepareNewWorld(IslandType islandType, String islandName) {
         SlimeLoader slimeLoader = this.slimePlugin.getLoader("mysql");
+        if (slimeLoader == null) {
+            this.logger.error("SlimeLoader cannot be null.");
+            return Optional.empty();
+        }
 
         SlimePropertyMap slimePropertyMap = new SlimePropertyMap();
 
@@ -63,15 +66,16 @@ public class IslandCreator {
         try {
             slimeWorld = this.slimePlugin.createEmptyWorld(slimeLoader, islandName, false, slimePropertyMap);
             if (slimeWorld == null) {
+                this.logger.error("Could not create new world for {}-{}.", islandType, islandName);
                 return Optional.empty();
             }
-        } catch (WorldAlreadyExistsException | IOException exception) {
+        } catch (Exception exception) {
             exception.printStackTrace();
             return Optional.empty();
         }
 
         // Converting SlimeWorld to WorldEdit world
-        org.bukkit.World world = this.server.getWorld(slimeWorld.getName());
+        org.bukkit.World world = this.server.getWorld(islandName);
         if (world == null) {
             this.logger.warn("Something went wrong while parsing SlimeWorld to Bukkit world.");
             return Optional.empty();
@@ -106,6 +110,7 @@ public class IslandCreator {
                     .ignoreAirBlocks(false)
                     .build();
             Operations.complete(operation);
+            this.logger.info("Schematic pasted to {} world.", world.getName());
         } catch (WorldEditException exception) {
             exception.printStackTrace();
             return Optional.empty();

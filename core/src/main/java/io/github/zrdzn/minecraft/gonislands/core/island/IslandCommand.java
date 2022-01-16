@@ -49,7 +49,7 @@ public class IslandCommand implements CommandExecutor {
         UUID playerId = player.getUniqueId();
 
         if (args.length == 0) {
-            this.islandService.createIsland(this.globalIslandType, null, playerId);
+            this.islandService.createIsland(this.globalIslandType, null, playerId, playerId);
             return true;
         }
 
@@ -61,7 +61,7 @@ public class IslandCommand implements CommandExecutor {
                         islandName = args[1];
                     }
 
-                    this.islandService.createIsland(this.globalIslandType, islandName, playerId);
+                    this.islandService.createIsland(this.globalIslandType, islandName, playerId, playerId);
                 }
                 case "delete" -> {
                     Island islandToBeDeleted;
@@ -78,7 +78,7 @@ public class IslandCommand implements CommandExecutor {
                         islandToBeDeleted = islands.get(Integer.parseInt(args[1]));
                     }
 
-                    this.islandService.removeIsland(islandToBeDeleted.getId());
+                    this.islandService.removeIsland(islandToBeDeleted.getId(), playerId);
                 }
                 case "list" -> this.sendIslandList(playerId, islands);
                 default -> this.messageService.sendMessage(playerId, "command.invalid_argument");
