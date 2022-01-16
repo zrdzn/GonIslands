@@ -16,7 +16,6 @@
 package io.github.zrdzn.minecraft.gonislands.core.island;
 
 import com.grinderwolf.swm.api.SlimePlugin;
-import com.grinderwolf.swm.api.exceptions.WorldAlreadyExistsException;
 import com.grinderwolf.swm.api.loaders.SlimeLoader;
 import com.grinderwolf.swm.api.world.SlimeWorld;
 import com.grinderwolf.swm.api.world.properties.SlimePropertyMap;
@@ -70,8 +69,7 @@ public class IslandCreator {
                 this.logger.error("Could not create new world for {}-{}.", islandType, islandName);
                 return Optional.empty();
             }
-            this.logger.info("Created new '{}' slime world", islandName);
-        } catch (WorldAlreadyExistsException | IOException exception) {
+        } catch (Exception exception) {
             exception.printStackTrace();
             return Optional.empty();
         }
