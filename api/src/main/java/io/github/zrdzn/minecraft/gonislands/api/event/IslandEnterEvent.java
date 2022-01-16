@@ -31,9 +31,9 @@ public class IslandEnterEvent extends Event implements Cancellable {
 
     private static final HandlerList handlers = new HandlerList();
 
-    protected final UUID islandId;
-    protected final UUID playerId;
-    protected boolean cancel;
+    private final UUID islandId;
+    private final UUID playerId;
+    private boolean cancel;
 
     public IslandEnterEvent(UUID islandId, UUID playerId) {
         super(true);
