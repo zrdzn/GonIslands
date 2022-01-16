@@ -60,13 +60,13 @@ public class GonIslandsPlugin extends JavaPlugin {
 
         Logger logger = this.getSLF4JLogger();
 
-        IslandCreator islandCreator = new IslandCreator(slimePlugin, server, logger);
+        IslandCreator islandCreator = new IslandCreator(logger, slimePlugin, server);
 
         this.loadBundles();
 
         MessageService messageService = new MessageService(server, logger, this.bundleMap);
 
-        IslandRepository islandRepository = new IslandRepository(this.dataSource, islandCreator);
+        IslandRepository islandRepository = new IslandRepository(logger, this.dataSource, islandCreator);
 
         IslandType globalIslandType;
         try {
@@ -113,7 +113,7 @@ public class GonIslandsPlugin extends JavaPlugin {
             return;
         }
 
-        IslandService islandService = new IslandServiceImpl(islandRepository, pluginManager, messageService);
+        IslandService islandService = new IslandServiceImpl(islandRepository, pluginManager, server, messageService);
         this.gonIslandsApi.setIslandService(islandService);
 
         this.getCommand("island").setExecutor(new IslandCommand(islandService, globalIslandType, messageService));

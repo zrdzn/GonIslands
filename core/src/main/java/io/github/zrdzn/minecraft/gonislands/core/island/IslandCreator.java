@@ -44,18 +44,22 @@ import java.util.UUID;
 
 public class IslandCreator {
 
+    private final Logger logger;
     private final SlimePlugin slimePlugin;
     private final Server server;
-    private final Logger logger;
 
-    public IslandCreator(SlimePlugin slimePlugin, Server server, Logger logger) {
+    public IslandCreator(Logger logger, SlimePlugin slimePlugin, Server server) {
+        this.logger = logger;
         this.slimePlugin = slimePlugin;
         this.server = server;
-        this.logger = logger;
     }
 
     public Optional<UUID> prepareNewWorld(IslandType islandType, String islandName) {
         SlimeLoader slimeLoader = this.slimePlugin.getLoader("mysql");
+        if (slimeLoader == null) {
+            this.logger.error("SlimeLoader cannot be null.");
+            return Optional.empty();
+        }
 
         SlimePropertyMap slimePropertyMap = new SlimePropertyMap();
 
@@ -63,6 +67,7 @@ public class IslandCreator {
         try {
             slimeWorld = this.slimePlugin.createEmptyWorld(slimeLoader, islandName, false, slimePropertyMap);
             if (slimeWorld == null) {
+                this.logger.error("Could not create new world for {}-{}.", islandType, islandName);
                 return Optional.empty();
             }
             this.logger.info("Created new '{}' slime world", islandName);
