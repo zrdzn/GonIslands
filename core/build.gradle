@@ -4,7 +4,7 @@ plugins {
 }
 
 group "io.github.zrdzn.minecraft.gonislands"
-version project.version
+version "1.0.0"
 
 compileJava.options.encoding = "UTF-8"
 
@@ -29,5 +29,5 @@ dependencies {
 }
 
 shadowJar {
-    archiveFileName = "GonIslands v${project.version}.jar"
+    archiveFileName = "GonIslands v${archiveVersion.get()}.jar"
 }
