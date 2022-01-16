@@ -75,7 +75,7 @@ public class IslandCreator {
         }
 
         // Converting SlimeWorld to WorldEdit world
-        org.bukkit.World world = this.server.getWorld(slimeWorld.getName());
+        org.bukkit.World world = this.server.getWorld(islandName);
         if (world == null) {
             this.logger.warn("Something went wrong while parsing SlimeWorld to Bukkit world.");
             return Optional.empty();
