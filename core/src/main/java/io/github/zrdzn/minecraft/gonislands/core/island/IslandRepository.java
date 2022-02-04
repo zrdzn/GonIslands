@@ -49,7 +49,8 @@ public class IslandRepository {
                 new IllegalStateException("Something went wrong while creating new world."));
 
         try (Connection connection = this.dataSource.getConnection();
-             PreparedStatement statement = connection.prepareStatement("INSERT INTO islands (island_uuid, world_uuid, island_name, owner_uuid) VALUES (?, ?, ?, ?);")) {
+             PreparedStatement statement = connection.prepareStatement(
+                 "INSERT INTO islands (island_uuid, world_uuid, island_name, owner_uuid) VALUES (?, ?, ?, ?);")) {
             statement.setString(1, newIslandId.toString());
             statement.setString(2, islandWorldId.toString());
             statement.setString(3, islandName);
@@ -77,7 +78,8 @@ public class IslandRepository {
 
     public boolean delete(UUID islandId) {
         try (Connection connection = this.dataSource.getConnection();
-             PreparedStatement statement = connection.prepareStatement("DELETE FROM islands WHERE island_uuid = ?")) {
+             PreparedStatement statement = connection.prepareStatement(
+                 "DELETE FROM islands WHERE island_uuid = ?")) {
             statement.setString(1, islandId.toString());
 
             statement.executeUpdate();
@@ -91,7 +93,8 @@ public class IslandRepository {
 
     public Optional<Island> findIslandById(UUID islandId) {
         try (Connection connection = this.dataSource.getConnection();
-             PreparedStatement statement = connection.prepareStatement("SELECT * FROM islands WHERE island_uuid = ?;")) {
+             PreparedStatement statement = connection.prepareStatement(
+                 "SELECT * FROM islands WHERE island_uuid = ?;")) {
             statement.setString(1, islandId.toString());
 
             ResultSet resultSet = statement.executeQuery();
@@ -115,7 +118,8 @@ public class IslandRepository {
         List<Island> islandList = new ArrayList<>();
 
         try (Connection connection = this.dataSource.getConnection();
-             PreparedStatement statement = connection.prepareStatement("SELECT * FROM islands WHERE owner_uuid = ?")) {
+             PreparedStatement statement = connection.prepareStatement(
+                 "SELECT * FROM islands WHERE owner_uuid = ?")) {
             statement.setString(1, queryParameter);
 
             ResultSet resultSet = statement.executeQuery();

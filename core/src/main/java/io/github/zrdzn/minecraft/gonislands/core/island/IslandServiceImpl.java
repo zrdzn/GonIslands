@@ -37,7 +37,8 @@ public class IslandServiceImpl implements IslandService {
     private final Server server;
     private final MessageService messageService;
 
-    public IslandServiceImpl(IslandRepository islandRepository, PluginManager pluginManager, Server server, MessageService messageService) {
+    public IslandServiceImpl(IslandRepository islandRepository, PluginManager pluginManager, Server server,
+                             MessageService messageService) {
         this.islandRepository = islandRepository;
         this.pluginManager = pluginManager;
         this.server = server;
@@ -45,14 +46,16 @@ public class IslandServiceImpl implements IslandService {
     }
 
     @Override
-    public CompletableFuture<Void> createIsland(IslandType islandType, String islandName, UUID ownerId, UUID executorId) {
+    public CompletableFuture<Void> createIsland(IslandType islandType, String islandName, UUID ownerId,
+                                                UUID executorId) {
         return CompletableFuture.runAsync(() -> {
             OfflinePlayer player = this.server.getOfflinePlayer(ownerId);
             if (player.getPlayer() == null) {
                 throw new IllegalArgumentException("Player with that id ({}) does not exist on the server.");
             }
 
-            Island island = this.islandRepository.save(islandType, islandName == null ? player.getName() + "-" + player.getLastLogin() : islandName, ownerId);
+            Island island = this.islandRepository.save(islandType, islandName == null ?
+                player.getName() + "-" +player.getLastLogin() : islandName, ownerId);
             if (island == null) {
                 this.messageService.sendMessage(executorId, "command.something_went_wrong");
                 return;

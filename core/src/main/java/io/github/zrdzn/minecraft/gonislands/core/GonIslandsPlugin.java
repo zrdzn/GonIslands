@@ -90,7 +90,8 @@ public class GonIslandsPlugin extends JavaPlugin {
         }
 
         if (this.dataSource == null) {
-            logger.error("Something went wrong while connecting to database. Check your database configuration and restart your server after correcting it.");
+            logger.error("Something went wrong while connecting to database." +
+                "Check your database configuration and restart your server after correcting it.");
             pluginManager.disablePlugin(this);
 
             return;
@@ -102,7 +103,8 @@ public class GonIslandsPlugin extends JavaPlugin {
                 "world_uuid VARCHAR(32) NOT NULL UNIQUE KEY," +
                 "island_name VARCHAR(32)," +
                 "owner_uuid VARCHAR(36) NOT NULL UNIQUE KEY);";
-        try (Connection connection = this.dataSource.getConnection(); PreparedStatement statement = connection.prepareStatement(query)) {
+        try (Connection connection = this.dataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
             if (statement.executeUpdate() > 0) {
                 logger.info("Table has been created because it did not exist.");
             }
@@ -132,8 +134,10 @@ public class GonIslandsPlugin extends JavaPlugin {
 
     private void loadBundles() {
         String baseName = "locale/locale";
-        this.bundleMap.put(Locale.forLanguageTag("en-US"), ResourceBundle.getBundle(baseName, Locale.forLanguageTag("en-US")));
-        this.bundleMap.put(Locale.forLanguageTag("pl-PL"), ResourceBundle.getBundle(baseName, Locale.forLanguageTag("pl-PL")));
+        this.bundleMap.put(Locale.forLanguageTag("en-US"),
+            ResourceBundle.getBundle(baseName, Locale.forLanguageTag("en-US")));
+        this.bundleMap.put(Locale.forLanguageTag("pl-PL"),
+            ResourceBundle.getBundle(baseName, Locale.forLanguageTag("pl-PL")));
     }
 
 }
