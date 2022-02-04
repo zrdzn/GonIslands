@@ -20,12 +20,12 @@ repositories {
 dependencies {
     implementation project(":api")
 
-    implementation "org.slf4j:slf4j-log4j12:1.7.33"
+    implementation "org.slf4j:slf4j-log4j12:1.7.35"
     implementation "com.zaxxer:HikariCP:5.0.1"
 
     compileOnly "io.papermc.paper:paper-api:1.18.1-R0.1-SNAPSHOT"
     compileOnly "com.grinderwolf:slimeworldmanager-api:2.6.2-SNAPSHOT"
-    compileOnly "com.sk89q.worldedit:worldedit-bukkit:7.2.0"
+    compileOnly "com.sk89q.worldedit:worldedit-bukkit:7.2.9"
 }
 
 shadowJar {
