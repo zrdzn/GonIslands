@@ -59,7 +59,7 @@ public class IslandRepository {
                 this.logger.info("{} island has been saved to database.", islandName);
             }
         } catch (SQLException exception) {
-            exception.printStackTrace();
+            this.logger.error("Something went wrong while saving island.", exception);
             return null;
         }
 
@@ -84,7 +84,7 @@ public class IslandRepository {
 
             return true;
         } catch (SQLException exception) {
-            exception.printStackTrace();
+            this.logger.error("Something went wrong while deleting island.", exception);
             return false;
         }
     }
@@ -101,7 +101,7 @@ public class IslandRepository {
 
             return this.parseFromDatabase(resultSet).isPresent() ? this.parseFromDatabase(resultSet) : Optional.empty();
         } catch (SQLException exception) {
-            exception.printStackTrace();
+            this.logger.error("Something went wrong while selecting island.", exception);
             return Optional.empty();
         }
     }
@@ -123,7 +123,7 @@ public class IslandRepository {
                 this.parseFromDatabase(resultSet).ifPresent(islandList::add);
             }
         } catch (SQLException exception) {
-            exception.printStackTrace();
+            this.logger.error("Something went wrong while selecting island.", exception);
         }
 
         return islandList;
@@ -141,7 +141,7 @@ public class IslandRepository {
             playerId = UUID.fromString(row.getString("owner_uuid"));
             islandName = row.getString("island_name");
         } catch (SQLException exception) {
-            exception.printStackTrace();
+            this.logger.error("Something went wrong while parsing island.", exception);
             return Optional.empty();
         }
 

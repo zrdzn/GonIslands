@@ -70,7 +70,7 @@ public class IslandCreator {
                 return Optional.empty();
             }
         } catch (Exception exception) {
-            exception.printStackTrace();
+            this.logger.error("Could not create new world.", exception);
             return Optional.empty();
         }
 
@@ -99,7 +99,7 @@ public class IslandCreator {
         try (ClipboardReader reader = format.getReader(new FileInputStream(file))) {
             clipboard = reader.read();
         } catch (IOException exception) {
-            exception.printStackTrace();
+            this.logger.error("Could not read clipboard.", exception);
             return Optional.empty();
         }
 
@@ -112,7 +112,7 @@ public class IslandCreator {
             Operations.complete(operation);
             this.logger.info("Schematic pasted to {} world.", world.getName());
         } catch (WorldEditException exception) {
-            exception.printStackTrace();
+            this.logger.error("Could not paste the schematic.", exception);
             return Optional.empty();
         }
 

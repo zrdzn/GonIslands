@@ -83,7 +83,7 @@ public class GonIslandsPlugin extends JavaPlugin {
             this.gonIslandsApi.setIslandType(globalIslandType);
             logger.info("Global island type was set to {}.", globalIslandType);
         } catch (InvalidConfigurationException exception) {
-            exception.printStackTrace();
+            logger.error("Could not parse configuration properly.", exception);
             pluginManager.disablePlugin(this);
 
             return;
@@ -107,7 +107,7 @@ public class GonIslandsPlugin extends JavaPlugin {
                 logger.info("Table has been created because it did not exist.");
             }
         } catch (SQLException exception) {
-            exception.printStackTrace();
+            logger.error("Could not create new table.", exception);
             pluginManager.disablePlugin(this);
 
             return;
